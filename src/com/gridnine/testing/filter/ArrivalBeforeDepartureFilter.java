@@ -1,17 +1,16 @@
 package com.gridnine.testing.filter;
 
 import com.gridnine.testing.model.Flight;
-
-import java.util.List;
+import com.gridnine.testing.model.Segment;
 
 public class ArrivalBeforeDepartureFilter implements FlightFilter {
     @Override
-    public List<Flight> apply(List<Flight> flights) {
-        return flights.stream()
-                .filter(f ->
-                        f.getSegments()
-                                .stream()
-                                .noneMatch(s -> s.getArrivalDate().isBefore(s.getDepartureDate())))
-                .toList();
+    public boolean test(Flight flight) {
+        for (Segment segment : flight.getSegments()) {
+            if (segment.getArrivalDate().isBefore(segment.getDepartureDate())) {
+                return false;
+            }
+        }
+        return true;
     }
 }

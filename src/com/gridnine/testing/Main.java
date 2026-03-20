@@ -9,6 +9,7 @@ import com.gridnine.testing.model.Flight;
 import com.gridnine.testing.processor.FlightFilterProcessor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,22 +17,36 @@ public class Main {
         List<Flight> flights = FlightBuilder.createFlights();
 
         FlightFilter departedBeforeNowFilter = new DepartureBeforeNowFilter();
-        List<Flight> notDepartedFlights = processor.runFilter(flights, departedBeforeNowFilter);
-        printFlights(notDepartedFlights);
-
         FlightFilter arrivedBeforeDepartureFilter = new ArrivalBeforeDepartureFilter();
-        List<Flight> validFlights = processor.runFilter(flights, arrivedBeforeDepartureFilter);
-        printFlights(validFlights);
-
         FlightFilter groundTimeExceededFilter = new GroundTimeExceedsFilter();
-        List<Flight> groundTimeNotExceededFlights = processor.runFilter(flights, groundTimeExceededFilter);
-        printFlights(groundTimeNotExceededFlights);
+
+        List<FlightFilter> allFilters = List.of(
+                departedBeforeNowFilter,
+                arrivedBeforeDepartureFilter,
+                groundTimeExceededFilter
+        );
+        List<Flight> departedBeforeNowFlights = processor.applyFilter(flights, departedBeforeNowFilter);
+        printFlights(departedBeforeNowFlights, departedBeforeNowFilter);
+        List<Flight> arrivedBeforeDepartureFlights = processor.applyFilter(flights, arrivedBeforeDepartureFilter);
+        printFlights(arrivedBeforeDepartureFlights, arrivedBeforeDepartureFilter);
+        List<Flight> groundTimeNotExceededFlights = processor.applyFilter(flights, groundTimeExceededFilter);
+        printFlights(groundTimeNotExceededFlights, groundTimeExceededFilter);
+        List<Flight> flightsByAllFilters = processor.applyAllFilters(flights, allFilters);
+        printFlights(flightsByAllFilters, allFilters);
     }
 
-    private static void printFlights(List<Flight> flights) {
+    private static void printFlights(List<Flight> flights, List<FlightFilter> filters) {
+        String filterNames = filters.stream()
+                .map(filter -> filter.getClass().getSimpleName())
+                .collect(Collectors.joining(", "));
+        System.out.println("Filtered flights by filters: " + filterNames);
         for (Flight flight : flights) {
             System.out.println(flight);
         }
         System.out.println("=============================");
+    }
+
+    private static void printFlights(List<Flight> flights, FlightFilter filter){
+        printFlights(flights, List.of(filter));
     }
 }

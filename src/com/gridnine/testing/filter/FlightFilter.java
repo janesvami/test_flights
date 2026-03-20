@@ -2,8 +2,7 @@ package com.gridnine.testing.filter;
 
 import com.gridnine.testing.model.Flight;
 
-import java.util.List;
+import java.util.function.Predicate;
 
-public interface FlightFilter {
-    List<Flight> apply(List<Flight> flights);
+public interface FlightFilter extends Predicate<Flight> {
 }
