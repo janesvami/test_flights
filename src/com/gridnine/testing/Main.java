@@ -31,6 +31,7 @@ public class Main {
         printFlights(arrivedBeforeDepartureFlights, arrivedBeforeDepartureFilter);
         List<Flight> groundTimeNotExceededFlights = processor.applyFilter(flights, groundTimeExceededFilter);
         printFlights(groundTimeNotExceededFlights, groundTimeExceededFilter);
+
         List<Flight> flightsByAllFilters = processor.applyAllFilters(flights, allFilters);
         printFlights(flightsByAllFilters, allFilters);
     }

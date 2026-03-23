@@ -13,7 +13,7 @@ public final class FlightCheckUtil {
         if (flight == null) {
             throw new InvalidDataException("Flight cannot be null");
         }
-        List<Segment> segments = flight.getSegments();
+        final List<Segment> segments = flight.getSegments();
         if (segments == null || segments.isEmpty()) {
             throw new InvalidDataException("Flight segments cannot be null or empty");
         }
