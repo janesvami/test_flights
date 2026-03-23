@@ -22,12 +22,6 @@ public final class FlightCheckUtil {
             if (segment == null) {
                 throw new InvalidDataException("Segment cannot be null");
             }
-            if (segment.getArrivalDate() == null) {
-                throw new InvalidDataException("Arrival date cannot be null");
-            }
-            if (segment.getDepartureDate() == null) {
-                throw new InvalidDataException("Departure date cannot be null");
-            }
         });
     }
 }
